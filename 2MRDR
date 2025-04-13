@@ -706,8 +706,8 @@ def main(page: ft.Page):
 
 
     def Auth():
+        global secret_key
         device_id = str(uuid.getnode())
-        secret_key = "hrToJ2t73Q8c"
         auth_key = hashlib.sha256((device_id + secret_key).encode()).hexdigest()
         #print(auth_key)
         return auth_key
