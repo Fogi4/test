@@ -52,7 +52,7 @@ def main(page: ft.Page):
     page.window.height = 700
     page.window.maximizable = False
     page.window.resizable = False
-    page.title = "Кракаут 2MRDR Версия запущена облочно"
+    page.title = "Кракаут 2MRDR Да пущай падает, пихуй"
     page.window.center()
     page.vertical_alignment = ft.MainAxisAlignment.CENTER  # Центрирование по вертикали
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER  # Центрирование по горизонтали
