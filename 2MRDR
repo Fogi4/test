@@ -439,7 +439,7 @@ def main(page: ft.Page):
     keys_input = ft.TextField(
         label="Клавиши для мониторинга",
         tooltip="Клавиши для мониторинга (через запятую формат \"w,a,s,d,space,shift,ctrl,alt,tab,esc,enter\")",
-        label_style=ft.TextStyle(color=ft.Colors.RED),
+        label_style=ft.TextStyle(color=ft.Colors.WHITE),
         value=None,
         width=400,
         color=ft.Colors.WHITE,
