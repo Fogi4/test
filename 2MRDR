@@ -22,7 +22,7 @@ assets_path = os.path.join(base_path, "assets")
 #цытаты
 #залипательный гудок
 #ссылка на дс
-#  
+#
 #
 #
 #
@@ -108,6 +108,7 @@ def main(page: ft.Page):
                 "hotkeycruis": "H",
                 "hotkeycruisscan": 35,
                 "hotkeytogslider": False,
+                "beepsignalslider": False,
                 "private_key": ''.join(random.choices(string.ascii_letters + string.digits, k=8)),
             }
             save_settings(default_settings)
@@ -129,6 +130,7 @@ def main(page: ft.Page):
                 "hotkeycruisscan": toggle_keycruis,
                 "hotkeytogslider": hotkeytogslider.value,
                 "private_key": private_key_input.value,
+                "beepsignalslider": beepsignalslider.value,
             }
         save_settings(settings)
     
@@ -148,6 +150,7 @@ def main(page: ft.Page):
             toggle_keycruis = app_settings['hotkeycruisscan']
             hotkeytogslider.value = app_settings['hotkeytogslider']
             private_key_input.value = app_settings['private_key']
+            beepsignalslider.value = app_settings['beepsignalslider']
         except:
             pagep("Error loading settings")
     
@@ -306,6 +309,14 @@ def main(page: ft.Page):
         thumb_icon={ft.ControlState.DEFAULT: ft.Icons.KEYBOARD},
         label_position=ft.LabelPosition.LEFT,
     )
+    
+    beepsignalslider = ft.Switch(
+        label="Зажим сигнала",
+        value=False,
+        scale=1.2,
+        thumb_icon={ft.ControlState.DEFAULT: ft.Icons.KEYBOARD},
+        label_position=ft.LabelPosition.LEFT,
+    )
 
     def set_hotkeycruis(e):
         page.open(hotkeyw)
@@ -372,7 +383,7 @@ def main(page: ft.Page):
     
     rowhotkey_settings = ft.Row([ft.Text("Хоткей Вкл/Выкл"), hotkey],alignment=ft.alignment.center)
     containerhotkey_settings = ft.Container(
-        content=ft.Column([rowhotkey_settings,sound_enable],alignment=ft.alignment.center,horizontal_alignment=ft.CrossAxisAlignment.CENTER,expand=False),
+        content=ft.Column([rowhotkey_settings,sound_enable,beepsignalslider],alignment=ft.alignment.center,horizontal_alignment=ft.CrossAxisAlignment.CENTER,expand=False),
         alignment=ft.alignment.center,
         expand=False,
         border=ft.border.all(1, ft.Colors.BLACK),
@@ -582,11 +593,15 @@ def main(page: ft.Page):
             if activation_toggle:
                 ws.Beep(int(500), int(200))
                 ws.Beep(int(500), int(200))
+                if beepsignalslider:
+                    keyboard.press(35)
             else:
                 ws.Beep(int(100), int(400))
                 for key in key_states:
                     keyboard.release(key)
                 key_states = {}
+                if beepsignalslider:
+                    keyboard.release(35)
 
     cruis_status = False
     def on_press(event):
@@ -706,8 +721,8 @@ def main(page: ft.Page):
 
 
     def Auth():
-        global secret_key
         device_id = str(uuid.getnode())
+        secret_key = "hrToJ2t73Q8c"
         auth_key = hashlib.sha256((device_id + secret_key).encode()).hexdigest()
         #print(auth_key)
         return auth_key
