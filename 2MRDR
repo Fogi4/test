@@ -593,14 +593,14 @@ def main(page: ft.Page):
             if activation_toggle:
                 ws.Beep(int(500), int(200))
                 ws.Beep(int(500), int(200))
-                if beepsignalslider:
+                if beepsignalslider.value:
                     keyboard.press(35)
             else:
                 ws.Beep(int(100), int(400))
                 for key in key_states:
                     keyboard.release(key)
                 key_states = {}
-                if beepsignalslider:
+                if beepsignalslider.value:
                     keyboard.release(35)
 
     cruis_status = False
