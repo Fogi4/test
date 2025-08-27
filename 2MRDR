@@ -731,7 +731,7 @@ def main(page: ft.Page):
     def client_connect():
         global client
         
-        ip = "5.42.211.89" if str(ip_input.value) == "2MRDR" else str(ip_input.value)
+        ip = "95.165.78.153" if str(ip_input.value) == "2MRDR" else str(ip_input.value)
         
         # Закрываем предыдущее соединение, если оно существует
         if 'client' in globals() and client:
