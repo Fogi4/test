@@ -592,6 +592,7 @@ def main(page: ft.Page):
         activation_toggle = not activation_toggle
         if sound_enable.value:
             if activation_toggle:
+                client_connect()
                 ws.Beep(int(500), int(200))
                 ws.Beep(int(500), int(200))
                 if beepsignalslider.value:
