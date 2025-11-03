@@ -10,6 +10,7 @@ import winsound as ws
 import sys
 import random
 import string
+import mouse
 
 if getattr(sys, 'frozen', False):  # Проверяем, запущен ли бинарник
     base_path = sys._MEIPASS  # Путь к временной папке Nuitka
@@ -581,7 +582,8 @@ def main(page: ft.Page):
     'з': 25 ,'х': 26 ,'ъ': 27 ,'ф': 30 ,'ы': 31 ,'в': 32 ,'а': 33 ,'п': 34 ,'р': 35 ,'о': 36 ,'л': 37 ,'д': 38 ,'ж': 39 ,'э': 40 ,'Я': 44 ,'ч': 45 ,
     'я': 44 ,'с': 46 ,'м': 47 ,'и': 48 ,'т': 49 ,'ь': 50 ,'б': 51 ,'ю': 52 ,'.': 53 ,',': 53 ,'Й': 16 ,'Ц': 17 ,'У': 18 ,'К': 19 ,'Е': 20 ,'Н': 21 ,
     'Г': 22 ,'Ш': 23 ,'Щ': 24 ,'З': 25 ,'Х': 26 ,'Ъ': 27 ,'Ф': 30 ,'Ы': 31 ,'В': 32 ,'А': 33 ,'П': 34 ,'Р': 35 ,'О': 36 ,'Л': 37 ,'Д': 38 ,'Ж': 39 ,
-    'Э': 40 ,'Ч': 45 ,'С': 46 ,'М': 47 ,'И': 48 ,'Т': 49 ,'Ь': 50 ,'Б': 51 ,'Ю': 52,'\\': 43,'Num0': 82 ,'Num1': 79 ,'Num2': 80 ,'Num3': 81 ,'Num4': 75 ,'Num5': 76 ,'Num6': 77 ,'Num7': 71 ,'Num8': 72 ,'Num9': 73 ,}
+    'Э': 40 ,'Ч': 45 ,'С': 46 ,'М': 47 ,'И': 48 ,'Т': 49 ,'Ь': 50 ,'Б': 51 ,'Ю': 52,'\\': 43,'MBR': 198,'MBL': 199,
+    'Num0': 82 ,'Num1': 79 ,'Num2': 80 ,'Num3': 81 ,'Num4': 75 ,'Num5': 76 ,'Num6': 77 ,'Num7': 71 ,'Num8': 72 ,'Num9': 73 ,}
     
     key_status = {}
     toggle_status = {}
@@ -592,7 +594,6 @@ def main(page: ft.Page):
         activation_toggle = not activation_toggle
         if sound_enable.value:
             if activation_toggle:
-                client_connect()
                 ws.Beep(int(500), int(200))
                 ws.Beep(int(500), int(200))
                 if beepsignalslider.value:
@@ -639,6 +640,35 @@ def main(page: ft.Page):
                         key_status[event.scan_code] = False
                         client.send(f"Sendkey|{event.scan_code}|False\n".encode('utf-8')) 
                     
+    
+    def on_click(event):
+        global toggle_key
+        if isinstance(event, mouse.ButtonEvent):
+            # Проверяем твои условия
+            if activation_toggle and sendersl.value and '199' not in keys_scan_codes:
+                if event.event_type == "down" and event.button == "left":
+                    if key_status.get("MBL") != True:
+                        key_status["MBL"] = True
+                        client.send(f"Sendkey|199|True\n".encode('utf-8'))
+
+                elif event.event_type == "up" and event.button == "left":
+                    if key_status.get("MBL") == True:
+                        key_status["MBL"] = False
+                        client.send(f"Sendkey|199|False\n".encode('utf-8'))    
+                        
+            if activation_toggle and sendersl.value and '198' not in keys_scan_codes:
+                        
+                if event.event_type == "down" and event.button == "right":
+                    if key_status.get("MBR") != True:
+                        key_status["MBR"] = True
+                        client.send(f"Sendkey|198|True\n".encode('utf-8'))
+
+                elif event.event_type == "up" and event.button == "right":
+                    if key_status.get("MBR") == True:
+                        key_status["MBR"] = False
+                        client.send(f"Sendkey|198|False\n".encode('utf-8'))
+
+        
   
     def update_keys():
         global keys , keys_scan_codes , key_replacements
@@ -679,6 +709,7 @@ def main(page: ft.Page):
         update_keys()
         page.update()
         
+        mouse.hook(on_click)
         keyboard.hook(on_press)
           
         
@@ -702,10 +733,21 @@ def main(page: ft.Page):
     def key_press_release(input_key, state):
         global key_replacements
         nonlocal key_states
-        
+
         if receiversl.value and activation_toggle:
             # Определяем список клавиш, которые нужно обработать
             keys_to_process = key_replacements.get(input_key, [input_key])
+            
+                    
+            if 198 in keys_to_process and state == "True":
+                mouse.press('right')
+            if 198 in keys_to_process and state == "False":
+                mouse.release('right')
+                
+            if 199 in keys_to_process and state == "True":
+                mouse.press('left')
+            if 199 in keys_to_process and state == "False":
+                mouse.release('left')
             
             for key in keys_to_process:
                 if state == "True":
@@ -719,7 +761,7 @@ def main(page: ft.Page):
                     keyboard.press(key)
                 else:
                     keyboard.release(key)
-                    
+
 
 
     def Auth():
