@@ -1,3 +1,4 @@
+#Ver 4.1
 import flet as ft
 import os
 import json
@@ -645,7 +646,7 @@ def main(page: ft.Page):
         global toggle_key
         if isinstance(event, mouse.ButtonEvent):
             # Проверяем твои условия
-            if activation_toggle and sendersl.value and '199' not in keys_scan_codes:
+            if activation_toggle and sendersl.value and 199 in keys_scan_codes:
                 if event.event_type == "down" and event.button == "left":
                     if key_status.get("MBL") != True:
                         key_status["MBL"] = True
@@ -656,8 +657,7 @@ def main(page: ft.Page):
                         key_status["MBL"] = False
                         client.send(f"Sendkey|199|False\n".encode('utf-8'))    
                         
-            if activation_toggle and sendersl.value and '198' not in keys_scan_codes:
-                        
+            if activation_toggle and sendersl.value and 198 in keys_scan_codes:
                 if event.event_type == "down" and event.button == "right":
                     if key_status.get("MBR") != True:
                         key_status["MBR"] = True
@@ -668,7 +668,6 @@ def main(page: ft.Page):
                         key_status["MBR"] = False
                         client.send(f"Sendkey|198|False\n".encode('utf-8'))
 
-        
   
     def update_keys():
         global keys , keys_scan_codes , key_replacements
